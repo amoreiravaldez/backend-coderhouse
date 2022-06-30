@@ -81,7 +81,7 @@ Productos.save({
 
 // Metodo getAll - Devuelve un array con los objetos dentro del archivo.
 
-Productos.getAll();
+//Productos.getAll();
 
 // Método getById - Recibe un id y devuelve el objeto con ese id, o null si no está.
 
