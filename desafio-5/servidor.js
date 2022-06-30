@@ -1,6 +1,4 @@
 const fs = require("fs");
-let productArray = [];
-let productObject = {};
 const express = require('express');
 const app = express();
 const PORT = 8080;
@@ -12,15 +10,14 @@ const server = app.listen(PORT, () => {
 server.on("error", error => console.log(`Error en servidor ${error}`));
 
 // Clase contenedor
-
 class Contenedor {  
     constructor(nombreDelArchivo) {
         this.nombreDelArchivo = "./" + nombreDelArchivo;
     }
 
-    async getById(id) {
+    getById(id) {
         try {
-            productArray = JSON.parse(await fs.promises.readFile(this.nombreDelArchivo, "utf8"));
+            productArray = JSON.parse(fs.readFileSync(this.nombreDelArchivo, "utf8"));
             let productById = productArray.find((product) => product.id == id);
             if (productById === undefined ) {return null } else { return productById};
         }
@@ -29,10 +26,10 @@ class Contenedor {
         }
     }
 
-    async getAll() {
+    getAll() {
         try {
-            productArray = JSON.parse(await fs.promises.readFile(this.nombreDelArchivo, "utf8"));
-            console.log(productArray)
+            const productArray = JSON.parse(fs.readFileSync(this.nombreDelArchivo, "utf8"));
+            return productArray;
         }
         catch (error) {
             console.log(error);
@@ -45,8 +42,8 @@ app.get('/', (req,res) => {
 });
 
 app.get('/productos', (req,res) => {
-    const Productos = new Contenedor("productos.txt");
-    res.send(Productos.getAll());
+    const productos = new Contenedor("productos.txt");
+    res.send(productos.getAll());
 });
 
 app.get('/productoRandom', (req,res) => {
