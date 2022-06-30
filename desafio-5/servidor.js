@@ -17,9 +17,9 @@ class Contenedor {
 
     getById(id) {
         try {
-            productArray = JSON.parse(fs.readFileSync(this.nombreDelArchivo, "utf8"));
+            const productArray = JSON.parse(fs.readFileSync(this.nombreDelArchivo, "utf8"));
             let productById = productArray.find((product) => product.id == id);
-            if (productById === undefined ) {return null } else { return productById};
+            return productById;
         }
         catch (error) {
             console.log(error);
@@ -35,6 +35,7 @@ class Contenedor {
             console.log(error);
         }
     }
+
 }
 
 app.get('/', (req,res) => {
@@ -42,12 +43,17 @@ app.get('/', (req,res) => {
 });
 
 app.get('/productos', (req,res) => {
-    const productos = new Contenedor("productos.txt");
+    let productos = new Contenedor("productos.txt");
     res.send(productos.getAll());
 });
 
 app.get('/productoRandom', (req,res) => {
-    //res.send({mensaje: 'hola mundo'})
+    
+    function randomIntFromInterval(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    };
+    let productos = new Contenedor("productos.txt");
+    res.send(productos.getById(randomIntFromInterval(1,4)));
 });
 
 
